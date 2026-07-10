@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 public class Topic {
 
     @Id
-    private Long id; // same id as topic_id in the Python service's topics.csv
+    private Long id;
 
     private String subject;
     private String name;
     private Integer difficulty;
-    private Long prerequisiteId; // null = no prerequisite
+    private Long prerequisiteId;
 }
