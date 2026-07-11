@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-// Fills the topics table on first run so there's something to query/recommend against.
 @Component
 @RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {

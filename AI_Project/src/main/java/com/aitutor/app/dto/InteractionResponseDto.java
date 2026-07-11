@@ -17,6 +17,6 @@ public class InteractionResponseDto {
     private Long topicId;
     private Double score;
     private Integer attempts;
-    private String status;       // MASTERED / IN_PROGRESS / WEAK - from ScoreClassifier
+    private String status;
     private LocalDateTime recordedAt;
 }
