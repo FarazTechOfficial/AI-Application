@@ -1,0 +1,10 @@
+package com.aitutor.app.repository;
+
+import com.aitutor.app.entity.Interaction;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface InteractionRepository extends JpaRepository<Interaction, Long> {
+    List<Interaction> findByStudentId(Long studentId);
+}
