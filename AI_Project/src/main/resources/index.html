@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --surface: #ffffff;
+    --bg: #f4f6f8;
+    --bg-subtle: #eef1f5;
+    --text: #1a1d23;
+    --text-secondary: #6b7280;
+    --text-tertiary: #9ca3af;
+    --border: #e5e7eb;
+    --border-light: #f0f1f3;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-soft: #eef2ff;
+    --success: #059669;
+    --success-soft: #ecfdf5;
+    --warning: #d97706;
+    --warning-soft: #fffbeb;
+    --danger: #dc2626;
+    --danger-soft: #fef2f2;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+    --transition: 150ms ease;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--primary);
+    letter-spacing: -0.3px;
+  }
+
+  .student-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  select, input[type=text], input[type=number] {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    transition: border-color var(--transition);
+  }
+  select:focus, input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-soft);
+  }
+  select option { color: var(--text); }
+
+  button {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--primary-hover); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover {
+    background: var(--bg-subtle);
+    color: var(--text);
+    border-color: var(--text-tertiary);
+  }
+
+  .btn-dark {
+    background: var(--text);
+    color: #fff;
+  }
+  .btn-dark:hover { opacity: 0.85; }
+
+  button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 24px 100px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 120px 20px;
+  }
+  .empty-state h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .empty-state p {
+    color: var(--text-tertiary);
+    font-size: 15px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px;
+    margin-bottom: 24px;
+  }
+
+  .tab {
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    user-select: none;
+    transition: all var(--transition);
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); background: var(--bg-subtle); }
+  .tab.active {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .badge-math { background: #eef2ff; color: #4f46e5; }
+  .badge-science { background: #ecfdf5; color: #059669; }
+  .badge-english { background: #fdf2f8; color: #db2777; }
+
+  .narrative-text {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-secondary);
+  }
+
+  .weak-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+    transition: border-color var(--transition);
+  }
+  .weak-item:hover { border-color: var(--warning); }
+
+  .weak-item-name { font-weight: 600; font-size: 14px; }
+  .weak-item-score {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--danger);
+    background: var(--danger-soft);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .form-row select, .form-row input {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .question-block {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .question-block:last-of-type { border-bottom: none; }
+
+  .question-text {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-secondary);
+    transition: all var(--transition);
+  }
+  .option-row:hover { background: var(--bg-subtle); color: var(--text); }
+
+  .result-banner { text-align: center; padding: 40px 24px; }
+
+  .result-score {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .result-detail {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .status-MASTERED { color: var(--success); }
+  .status-IN_PROGRESS { color: var(--warning); }
+  .status-WEAK { color: var(--danger); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  th {
+    color: var(--text-tertiary);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-secondary);
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .score-cell {
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .loader {
+    color: var(--text-tertiary);
+    padding: 40px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: var(--text);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transition: all 200ms ease;
+    pointer-events: none;
+    z-index: 50;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .new-student-form {
+    display: none;
+    gap: 8px;
+    align-items: center;
+  }
+  .new-student-form.show { display: flex; }
+
+  @media (max-width: 640px) {
+    header { padding: 0 16px; }
+    main { padding: 20px 16px 80px; }
+    .tabs { overflow-x: auto; }
+    .form-row { flex-direction: column; }
+    .form-row select, .form-row input { min-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">tutor</div>
+  <div class="student-bar">
+    <select id="studentSelect"></select>
+    <button class="btn-ghost" id="newStudentBtn">New student</button>
+    <div class="new-student-form" id="newStudentForm">
+      <input type="text" id="newName" placeholder="Name">
+      <input type="text" id="newGrade" placeholder="Grade, e.g. 8th">
+      <button class="btn-primary" id="createStudentBtn">Add</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="empty-state" id="emptyState">
+    <h2>Pick or add a student</h2>
+    <p>Recommendations, quizzes and progress all live under a student profile.</p>
+  </div>
+
+  <div id="dashboard" style="display:none">
+    <div class="tabs">
+      <div class="tab active" data-tab="recommendations">Recommendations</div>
+      <div class="tab" data-tab="weak">Weak spots</div>
+      <div class="tab" data-tab="score">Log a score</div>
+      <div class="tab" data-tab="quiz">Take a quiz</div>
+      <div class="tab" data-tab="history">History</div>
+    </div>
+
+    <div class="panel active" id="panel-recommendations">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">What to study next</div>
+        </div>
+        <p class="narrative-text" id="narrativeText"></p>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-weak">
+      <div id="weakList"></div>
+    </div>
+
+    <div class="panel" id="panel-score">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:16px">Log a manual score</div>
+        <div class="form-row">
+          <select id="scoreTopic"></select>
+          <input type="number" id="scoreValue" placeholder="Score out of 100" min="0" max="100">
+          <button class="btn-dark" id="submitScoreBtn">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-quiz">
+      <div class="card" id="quizSetup">
+        <div class="card-title" style="margin-bottom:16px">Take a quiz</div>
+        <div class="form-row">
+          <select id="quizTopic"></select>
+          <select id="quizCount">
+            <option value="3">3 questions</option>
+            <option value="5" selected>5 questions</option>
+            <option value="8">8 questions</option>
+          </select>
+          <button class="btn-primary" id="generateQuizBtn">Generate</button>
+        </div>
+      </div>
+      <div id="quizArea"></div>
+    </div>
+
+    <div class="panel" id="panel-history">
+      <div class="card" style="padding:0;overflow:hidden">
+        <table>
+          <thead>
+            <tr><th>Topic</th><th>Score</th><th>Status</th><th>Attempts</th><th>Date</th></tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'http://localhost:8080/api';
+
+let students = [];
+let topics = [];
+let currentStudentId = null;
+let currentQuiz = null;
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+async function api(path, options) {
+  const res = await fetch(API + path, {
+    headers: { 'Content-Type': 'application/json' },
+    ...options
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error || ('Request failed: ' + res.status));
+  }
+  if (res.status === 204) return null;
+  return res.json();
+}
+
+async function loadStudents() {
+  students = await api('/students');
+  const select = document.getElementById('studentSelect');
+  select.innerHTML = '<option value="">Select a student</option>' +
+    students.map(s => '<option value="' + s.id + '">' + s.name + ' (' + (s.gradeLevel || 'no grade') + ')</option>').join('');
+  if (currentStudentId) select.value = currentStudentId;
+}
+
+async function loadTopics() {
+  topics = await api('/topics');
+  const bySubject = {};
+  topics.forEach(t => {
+    if (!bySubject[t.subject]) bySubject[t.subject] = [];
+    bySubject[t.subject].push(t);
+  });
+  const buildOptions = () => Object.entries(bySubject).map(([subject, list]) =>
+    '<optgroup label="' + subject + '">' +
+    list.map(t => '<option value="' + t.id + '">' + t.name + '</option>').join('') +
+    '</optgroup>'
+  ).join('');
+  document.getElementById('scoreTopic').innerHTML = buildOptions();
+  document.getElementById('quizTopic').innerHTML = buildOptions();
+}
+
+function topicName(id) {
+  const t = topics.find(x => x.id === id);
+  return t ? t.name : ('Topic ' + id);
+}
+
+function topicSubject(id) {
+  const t = topics.find(x => x.id === id);
+  return t ? t.subject : '';
+}
+
+function selectStudent(id) {
+  currentStudentId = id ? Number(id) : null;
+  if (!currentStudentId) {
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+    return;
+  }
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  refreshAll();
+}
+
+async function refreshAll() {
+  loadRecommendations();
+  loadWeakTopics();
+  loadHistory();
+}
+
+async function loadRecommendations() {
+  const el = document.getElementById('narrativeText');
+  el.textContent = 'Thinking through your next steps\u2026';
+  try {
+    const result = await api('/students/' + currentStudentId + '/recommendations-narrative?topN=6');
+    el.textContent = result.narrative;
+  } catch (e) {
+    el.textContent = 'Could not reach the recommendation service: ' + e.message;
+  }
+}
+
+async function loadWeakTopics() {
+  const el = document.getElementById('weakList');
+  el.innerHTML = '<div class="loader">Checking weak spots\u2026</div>';
+  try {
+    const items = await api('/students/' + currentStudentId + '/weak-topics');
+    if (!items.length) {
+      el.innerHTML = '<div class="loader">No weak spots on record.</div>';
+      return;
+    }
+    el.innerHTML = items.map(function(t) {
+      return '<div class="weak-item">' +
+        '<span class="weak-item-name">' + t.name + '</span>' +
+        '<span class="weak-item-score">' + t.score + '/100</span>' +
+      '</div>';
+    }).join('');
+  } catch (e) {
+    el.innerHTML = '<div class="loader">Could not load weak spots: ' + e.message + '</div>';
+  }
+}
+
+async function loadHistory() {
+  const body = document.getElementById('historyBody');
+  body.innerHTML = '<tr><td colspan="5" class="loader">Loading\u2026</td></tr>';
+  const items = await api('/students/' + currentStudentId + '/interactions');
+  if (!items.length) {
+    body.innerHTML = '<tr><td colspan="5" class="loader">No interactions logged yet.</td></tr>';
+    return;
+  }
+  body.innerHTML = items.slice().reverse().map(function(i) {
+    var sub = topicSubject(i.topicId);
+    var badgeClass = sub === 'Math' ? 'badge-math' : sub === 'Science' ? 'badge-science' : 'badge-english';
+    return '<tr>' +
+      '<td><span class="badge ' + badgeClass + '">' + sub + '</span> ' + topicName(i.topicId) + '</td>' +
+      '<td class="score-cell">' + i.score + '</td>' +
+      '<td class="status-' + i.status + '">' + i.status.replace('_', ' ') + '</td>' +
+      '<td>' + i.attempts + '</td>' +
+      '<td>' + new Date(i.recordedAt).toLocaleDateString() + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+document.getElementById('submitScoreBtn').addEventListener('click', function() {
+  var btn = document.getElementById('submitScoreBtn');
+  var topicId = Number(document.getElementById('scoreTopic').value);
+  var score = Number(document.getElementById('scoreValue').value);
+  if (!score && score !== 0) { toast('Enter a score first'); return; }
+  btn.disabled = true;
+  api('/students/' + currentStudentId + '/interactions', {
+    method: 'POST',
+    body: JSON.stringify({ topicId: topicId, score: score, attempts: 1 })
+  }).then(function() {
+    document.getElementById('scoreValue').value = '';
+    toast('Score saved');
+    refreshAll();
+  }).finally(function() {
+    btn.disabled = false;
+  });
+});
+
+document.getElementById('generateQuizBtn').addEventListener('click', function() {
+  var topicId = document.getElementById('quizTopic').value;
+  var numQuestions = document.getElementById('quizCount').value;
+  var area = document.getElementById('quizArea');
+  area.innerHTML = '<div class="loader">Writing your quiz\u2026</div>';
+  api('/students/' + currentStudentId + '/quiz/generate?topicId=' + topicId + '&numQuestions=' + numQuestions, {
+    method: 'POST'
+  }).then(function(quiz) {
+    currentQuiz = quiz;
+    renderQuiz();
+  }).catch(function(e) {
+    area.innerHTML = '<div class="loader">Could not generate quiz: ' + e.message + '</div>';
+  });
+});
+
+function renderQuiz() {
+  var area = document.getElementById('quizArea');
+  var html = '<div class="card"><div class="card-title" style="margin-bottom:16px">' +
+    currentQuiz.topicName + '</div>';
+  currentQuiz.questions.forEach(function(q, i) {
+    html += '<div class="question-block"><div class="question-text">' + (i + 1) + '. ' + q.question + '</div>';
+    q.options.forEach(function(opt) {
+      html += '<label class="option-row"><input type="radio" name="q' + i + '" value="' + opt + '"><span>' + opt + '</span></label>';
+    });
+    html += '</div>';
+  });
+  html += '<button id="submitQuizBtn" class="btn-primary" style="margin-top:8px">Submit answers</button></div>';
+  area.innerHTML = html;
+  document.getElementById('submitQuizBtn').addEventListener('click', submitQuiz);
+}
+
+function submitQuiz() {
+  var btn = document.getElementById('submitQuizBtn');
+  var answers = currentQuiz.questions.map(function(q, i) {
+    var picked = document.querySelector('input[name="q' + i + '"]:checked');
+    return picked ? picked.value : '';
+  });
+  if (answers.some(function(a) { return !a; })) { toast('Answer every question first'); return; }
+  if (btn) btn.disabled = true;
+  api('/students/' + currentStudentId + '/quiz/' + currentQuiz.quizId + '/submit', {
+    method: 'POST',
+    body: JSON.stringify({ answers: answers })
+  }).then(function(result) {
+    document.getElementById('quizArea').innerHTML =
+      '<div class="card result-banner">' +
+        '<div class="result-score status-' + result.status + '">' + result.score + '/100</div>' +
+        '<div class="result-detail">' + result.correctCount + ' of ' + result.totalQuestions + ' correct \u2014 ' + result.status.replace('_', ' ').toLowerCase() + '</div>' +
+        '<button class="btn-dark" onclick="document.getElementById(\'generateQuizBtn\').click()">Try another topic</button>' +
+      '</div>';
+    refreshAll();
+  }).catch(function(e) {
+    if (btn) btn.disabled = false;
+    toast('Submit failed: ' + e.message);
+  });
+}
+
+document.querySelectorAll('.tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+document.getElementById('studentSelect').addEventListener('change', function(e) {
+  selectStudent(e.target.value);
+});
+
+document.getElementById('newStudentBtn').addEventListener('click', function() {
+  document.getElementById('newStudentForm').classList.toggle('show');
+});
+
+document.getElementById('createStudentBtn').addEventListener('click', function() {
+  var name = document.getElementById('newName').value.trim();
+  var gradeLevel = document.getElementById('newGrade').value.trim();
+  if (!name) { toast('Give the student a name'); return; }
+  api('/students', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: name,
+      email: name.toLowerCase().replace(/\s+/g, '.') + '@example.com',
+      gradeLevel: gradeLevel
+    })
+  }).then(function(created) {
+    document.getElementById('newName').value = '';
+    document.getElementById('newGrade').value = '';
+    document.getElementById('newStudentForm').classList.remove('show');
+    return loadStudents().then(function() {
+      document.getElementById('studentSelect').value = created.id;
+      selectStudent(created.id);
+    });
+  });
+});
+
+loadStudents().then(function() { loadTopics(); });
+</script>
+
+</body>
+</html>
