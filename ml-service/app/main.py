@@ -5,9 +5,13 @@ the actual model lives (trained via train_model.py against MySQL data).
 Run:
     uvicorn app.main:app --reload --port 8000
 """
+import logging
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List
+
+logging.basicConfig(level=logging.INFO)
+logging.getLogger("app.llm_reasoner").setLevel(logging.INFO)
 
 from .recommender import TutorRecommender
 
