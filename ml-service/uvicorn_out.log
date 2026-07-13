@@ -1,0 +1,16 @@
+INFO:     127.0.0.1:51947 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63282 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63863 - "GET /students/1/recommendations-narrative?top_n=5 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60162 - "GET /students/1/recommendations?top_n=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59334 - "GET /students/83/weak-topics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59333 - "GET /students/83/recommendations-narrative?top_n=6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65249 - "GET /students/82/weak-topics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65250 - "GET /students/82/recommendations-narrative?top_n=6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60558 - "GET /students/83/weak-topics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60559 - "GET /students/83/recommendations-narrative?top_n=6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64367 - "GET /students/67/weak-topics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64368 - "GET /students/67/recommendations-narrative?top_n=6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50948 - "GET /students/83/weak-topics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50949 - "GET /students/83/recommendations-narrative?top_n=6 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63170 - "GET /students/4/weak-topics HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63171 - "GET /students/4/recommendations-narrative?top_n=6 HTTP/1.1" 200 OK

@@ -1,13 +1,26 @@
 import os
 import json
+import logging
 import requests
+
+logger = logging.getLogger(__name__)
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 
+def _mask_key(key):
+    if not key:
+        return "<not set>"
+    if len(key) <= 4:
+        return "****"
+    return "*" * (len(key) - 4) + key[-4:]
+
+
 def explain_recommendations(items):
     if not GROQ_API_KEY or not items:
+        logger.warning("explain_recommendations skipped: GROQ_API_KEY=%s, items=%s",
+                        _mask_key(GROQ_API_KEY), len(items) if items else 0)
         return None
 
     facts = [
@@ -43,19 +56,33 @@ def explain_recommendations(items):
             },
             timeout=12,
         )
+        logger.info("Groq explain_recommendations response: status=%d", resp.status_code)
+        if resp.status_code != 200:
+            logger.error("Groq API error (explain_recommendations): status=%d body=%s",
+                         resp.status_code, resp.text[:500])
+            return None
         resp.raise_for_status()
         content = resp.json()["choices"][0]["message"]["content"]
         cleaned = content.strip().removeprefix("```json").removesuffix("```").strip()
         reasons = json.loads(cleaned)
         if isinstance(reasons, list) and len(reasons) == len(items):
             return reasons
-    except Exception:
-        return None
+        logger.error("Groq response structure mismatch (explain_recommendations): "
+                     "got %s, expected list of length %d. Raw content: %s",
+                     type(reasons).__name__, len(items), content[:300])
+    except requests.exceptions.RequestException as e:
+        logger.error("Groq HTTP request failed (explain_recommendations): %s: %s",
+                     type(e).__name__, e)
+    except (KeyError, IndexError, json.JSONDecodeError) as e:
+        logger.error("Groq response parse failed (explain_recommendations): %s: %s",
+                     type(e).__name__, e)
     return None
 
 
 def generate_narrative(items):
     if not GROQ_API_KEY or not items:
+        logger.warning("generate_narrative skipped: GROQ_API_KEY=%s, items=%s",
+                        _mask_key(GROQ_API_KEY), len(items) if items else 0)
         return None
 
     facts = [
@@ -92,8 +119,18 @@ def generate_narrative(items):
             },
             timeout=12,
         )
+        logger.info("Groq generate_narrative response: status=%d", resp.status_code)
+        if resp.status_code != 200:
+            logger.error("Groq API error (generate_narrative): status=%d body=%s",
+                         resp.status_code, resp.text[:500])
+            return None
         resp.raise_for_status()
         content = resp.json()["choices"][0]["message"]["content"]
         return content.strip().strip('"')
-    except Exception:
-        return None
+    except requests.exceptions.RequestException as e:
+        logger.error("Groq HTTP request failed (generate_narrative): %s: %s",
+                     type(e).__name__, e)
+    except (KeyError, IndexError, json.JSONDecodeError) as e:
+        logger.error("Groq response parse failed (generate_narrative): %s: %s",
+                     type(e).__name__, e)
+    return None
