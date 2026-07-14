@@ -21,6 +21,8 @@ public class InteractionService {
     private final MlServiceClient mlServiceClient;
 
     public InteractionResponseDto recordInteraction(Long studentId, InteractionRequestDto request) {
+        log.info("recordInteraction called: studentId={}, topicId={}, score={}, attempts={}",
+                studentId, request.getTopicId(), request.getScore(), request.getAttempts());
         Interaction saved = interactionRepository.save(mapper.toEntity(studentId, request));
 
         try {

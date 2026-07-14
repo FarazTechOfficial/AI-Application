@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/students/{studentId}")
@@ -25,6 +26,13 @@ public class RecommendationController {
             @PathVariable Long studentId,
             @RequestParam(defaultValue = "5") int topN) {
         return ResponseEntity.ok(recommendationService.getRecommendations(studentId, topN));
+    }
+
+    @GetMapping("/recommendations-narrative")
+    public ResponseEntity<Map<String, String>> getRecommendationsNarrative(
+            @PathVariable Long studentId,
+            @RequestParam(defaultValue = "5") int topN) {
+        return ResponseEntity.ok(Map.of("narrative", recommendationService.getRecommendationsNarrative(studentId, topN)));
     }
 
     @GetMapping("/weak-topics")
